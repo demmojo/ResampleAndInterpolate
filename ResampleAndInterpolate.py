@@ -20,21 +20,21 @@
 import pandas as pd
 
 # Assign spreadsheet filename to `file`
-file = 'borusan.xlsx'
+file = 'original.xlsx'
 
 # Load spreadsheet
 xl = pd.ExcelFile(file)
 
-index = pd.date_range('2018-10-01', periods=2568, freq='H')  # creates a series of dates in hour intervals
+index = pd.date_range('2018-10-01', periods=17, freq='H')  # creates a series of dates in hour intervals
 
 # pandas dataframes are used to store the original and interpolated data
-original_data = xl.parse(xl.sheet_names[0], usecols=['Actual Production (MWh)'])  # store Actual Production values
+original_data = xl.parse(xl.sheet_names[0], usecols=['Value'])  # store Actual Production values
 original_data.index = index  # sets index to date series
 original_data.index.name = 'Date (Year-Month-Day Hour:Minute:Second'
 interpolated_data = original_data.resample('10S').interpolate()  # upsample data to every 10sec and linearly interpolate
 
 # Specify a writer for excel files
-writer = pd.ExcelWriter('borusan-interpolated.xlsx',  engine='xlsxwriter')
+writer = pd.ExcelWriter('new.xlsx',  engine='xlsxwriter')
 
 # Write your DataFrame to a file
 interpolated_data.to_excel(writer, 'Sheet1')
